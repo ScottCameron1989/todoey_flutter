@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todoey_flutter/widgets/task_list.dart';
 import 'add_task_screen.dart';
+import 'package:todoey_flutter/models/task.dart';
+import 'package:todoey_flutter/models/data.dart';
 
 class TasksScreen extends StatelessWidget {
   @override
@@ -17,7 +20,12 @@ class TasksScreen extends StatelessWidget {
                         child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: AddTaskScreen(),
+                      child:
+                          AddTaskScreen(addTaskCallback: (String returnedName) {
+                        Task newTask = Task(name: returnedName);
+                        Provider.of<Data>(context, listen: false)
+                            .addTask(newTask);
+                      }),
                     )));
           },
           backgroundColor: Colors.lightBlueAccent,
@@ -49,7 +57,7 @@ class TasksScreen extends StatelessWidget {
                       color: Colors.white),
                 ),
                 Text(
-                  '12 tasks',
+                  '${Provider.of<Data>(context).currentTasks.length} tasks',
                   style: TextStyle(color: Colors.white, fontSize: 18.0),
                 ),
               ],
